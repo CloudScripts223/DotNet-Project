@@ -1,0 +1,31 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- main
+
+pool:
+  name: 'Azure-Agent'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.x'  # or 6.0.x based on your app
+
+- script: dotnet restore
+  workingDirectory: CloudScripts223.Demo-Project 
+  displayName: 'Restore dependencies'
+
+- script: dotnet build --configuration $(buildConfiguration)
+  workingDirectory: CloudScripts223.Demo-Project 
+  displayName: 'Build the project'
+
+- script: dotnet test --no-build --verbosity normal
+  workingDirectory: CloudScripts223.Demo-Project 
+  displayName: 'Run tests'
